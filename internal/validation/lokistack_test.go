@@ -1252,7 +1252,7 @@ func TestLokiStackValidationWebhook_RetentionUpdateWarning(t *testing.T) {
 		v := &validation.LokiStackValidator{}
 		warnings, err := v.ValidateUpdate(ctx, currentStack, newStack)
 
-		require.Len(t, warnings, 0)
+		require.Empty(t, warnings)
 		require.NoError(t, err)
 	})
 
@@ -1382,7 +1382,7 @@ func TestLokiStackValidationWebhook_SchemaRemoval(t *testing.T) {
 		v := &validation.LokiStackValidator{}
 		warnings, err := v.ValidateUpdate(ctx, oldStack, l)
 
-		require.Len(t, warnings, 0)
+		require.Empty(t, warnings)
 		require.NoError(t, err)
 	})
 
@@ -1432,7 +1432,7 @@ func TestLokiStackValidationWebhook_SchemaRemoval(t *testing.T) {
 		v := &validation.LokiStackValidator{}
 		warnings, err := v.ValidateUpdate(ctx, oldStack, l)
 
-		require.Len(t, warnings, 0)
+		require.Empty(t, warnings)
 		require.Error(t, err)
 	})
 
@@ -1475,7 +1475,7 @@ func TestLokiStackValidationWebhook_SchemaRemoval(t *testing.T) {
 		v := &validation.LokiStackValidator{}
 		warnings, err := v.ValidateUpdate(ctx, oldStack, l)
 
-		require.Len(t, warnings, 0)
+		require.Empty(t, warnings)
 		require.NoError(t, err)
 	})
 }
@@ -1633,7 +1633,7 @@ func TestLokiStackValidationWebhook_SimultaneousSchemaRetentionChange(t *testing
 		warnings, err := v.ValidateUpdate(ctx, currentStack, newStack)
 
 		require.NoError(t, err)
-		require.Len(t, warnings, 0)
+		require.Empty(t, warnings)
 	})
 
 	t.Run("allow retention change when schemas unchanged", func(t *testing.T) {
