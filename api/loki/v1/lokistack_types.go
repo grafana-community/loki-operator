@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"reflect"
 	"strings"
 
 	corev1 "k8s.io/api/core/v1"
@@ -1075,6 +1076,21 @@ type PerTenantLimitsTemplateSpec struct {
 	// +optional
 	// +kubebuilder:validation:Optional
 	Retention *RetentionLimitSpec `json:"retention,omitempty"`
+}
+
+// IsEmpty returns true when the spec sets no limit. Ingestion and queries
+// left at their zero value render no keys in the runtime config, so the
+// tenant override ends up null. OTLP and retention always render when set.
+func (in PerTenantLimitsTemplateSpec) IsEmpty() bool {
+	return isZero(in.IngestionLimits) &&
+		isZero(in.QueryLimits) &&
+		in.OTLP == nil &&
+		in.Retention == nil
+}
+
+// isZero reports whether ptr is nil or points to the zero value of T.
+func isZero[T any](ptr *T) bool {
+	return ptr == nil || reflect.ValueOf(ptr).Elem().IsZero()
 }
 
 // LimitsSpec defines the spec for limits applied at ingestion or query
