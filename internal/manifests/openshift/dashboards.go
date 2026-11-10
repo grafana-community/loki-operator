@@ -34,7 +34,7 @@ func BuildDashboards(operatorNs string) ([]client.Object, error) {
 }
 
 func newDashboardConfigMap(filename string, content []byte) *corev1.ConfigMap {
-	cmName := strings.Split(filename, ".")[0]
+	cmName, _, _ := strings.Cut(filename, ".")
 
 	return &corev1.ConfigMap{
 		TypeMeta: metav1.TypeMeta{
