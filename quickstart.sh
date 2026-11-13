@@ -40,7 +40,7 @@ operator(){
     echo "-------------------------------------------"
     make deploy
     kubectl rollout status deployment controller-manager
-    kubectl rollout status deployment minio
+    kubectl rollout status statefulset garage
 }
 
 lokistack(){

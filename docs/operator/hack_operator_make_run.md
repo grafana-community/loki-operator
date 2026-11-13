@@ -40,13 +40,13 @@ _Note:_ This is helpful when you don't want to deploy the Loki Operator image ev
   kubectl get crd lokistacks.loki.grafana.com
   ```
 
-* Create a minio deployment in the cluster using:
+* Create a Garage deployment in the cluster using:
 
   ```console
-  kubectl apply -k config/overlays/development/minio
+  kubectl apply -k config/overlays/development/garage
   ```
 
-  This creates minio's  `deployment`, `service`, `pvc` and `secret` in the `default` namespace.
+  This creates Garage's `statefulset`, `configmap`, `service` and `secret` in the `default` namespace.
 
 * Now create a LokiStack instance using:
 
@@ -106,10 +106,10 @@ _Note:_ This is helpful when you don't want to deploy the Loki Operator image ev
   make uninstall
   ```
 
-* Cleanup the minio deployment using:
+* Cleanup the Garage deployment using:
 
   ```console
-  kubectl delete -k config/overlays/development/minio
+  kubectl delete -k config/overlays/development/garage
   ```
 
 ## Hacking on OpenShift
