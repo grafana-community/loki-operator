@@ -2,7 +2,7 @@ resources:
 - ../../crd
 - ../../rbac
 - ../../manager
-- ./minio
+- ./garage
 
 # Adds namespace to all resources.
 namespace: default

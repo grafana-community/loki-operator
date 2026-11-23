@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/require"
+	"sigs.k8s.io/yaml"
 
 	configv1 "github.com/grafana-community/loki-operator/api/config/v1"
 	lokiv1 "github.com/grafana-community/loki-operator/api/loki/v1"
@@ -975,6 +976,50 @@ func TestBuild_ConfigAndRuntimeConfig_WithRetention(t *testing.T) {
 	require.NoError(t, err)
 	require.YAMLEq(t, expCfg, string(cfg))
 	require.YAMLEq(t, expRCfg, string(rCfg))
+}
+
+// Admitted tenants must render at least one runtime config key.
+func TestBuild_RuntimeConfig_AdmittedTenantsRenderKeys(t *testing.T) {
+	specs := map[string]lokiv1.PerTenantLimitsTemplateSpec{
+		"no-limits":          {},
+		"empty-ingestion":    {IngestionLimits: &lokiv1.IngestionLimitSpec{}},
+		"empty-queries":      {QueryLimits: &lokiv1.PerTenantQueryLimitSpec{}},
+		"empty-blocked-list": {QueryLimits: &lokiv1.PerTenantQueryLimitSpec{Blocked: []lokiv1.BlockedQuerySpec{}}},
+		"ingestion-rate":     {IngestionLimits: &lokiv1.IngestionLimitSpec{IngestionRate: 4}},
+		"blocked-query": {
+			QueryLimits: &lokiv1.PerTenantQueryLimitSpec{
+				Blocked: []lokiv1.BlockedQuerySpec{
+					{Pattern: `{namespace="foo"}`},
+				},
+			},
+		},
+		"retention": {Retention: &lokiv1.RetentionLimitSpec{Days: 7}},
+	}
+
+	opts := defaultOptions()
+	overrides := make(map[string]LokiOverrides, len(specs))
+	for name, spec := range specs {
+		overrides[name] = LokiOverrides{Limits: spec}
+	}
+	opts.Overrides = overrides
+
+	_, rCfg, err := Build(opts)
+	require.NoError(t, err)
+
+	var runtimeConfig struct {
+		Overrides map[string]any `json:"overrides"`
+	}
+	require.NoError(t, yaml.Unmarshal(rCfg, &runtimeConfig))
+
+	for name, spec := range specs {
+		t.Run(name, func(t *testing.T) {
+			if spec.IsEmpty() {
+				return
+			}
+			require.NotNil(t, runtimeConfig.Overrides[name],
+				"tenant admitted by validation must render at least one runtime config key")
+		})
+	}
 }
 
 func TestBuild_ConfigAndRuntimeConfig_RulerConfigGenerated_WithAlertRelabelConfigs(t *testing.T) {
@@ -2263,7 +2308,9 @@ func TestBuild_ConfigAndRuntimeConfig_Schemas(t *testing.T) {
     cache_ttl: 24h
     resync_interval: 5m
     index_gateway_client:
-      server_address: dns:///loki-index-gateway-grpc-lokistack-dev.default.svc.cluster.local:9095`,
+      server_address: dns:///loki-index-gateway-grpc-lokistack-dev.default.svc.cluster.local:9095
+      grpc_client_config:
+        grpc_compression: gzip`,
 			expStructuredMetadata: `
   allow_structured_metadata: false`,
 		},
@@ -2293,7 +2340,9 @@ func TestBuild_ConfigAndRuntimeConfig_Schemas(t *testing.T) {
     cache_ttl: 24h
     resync_interval: 5m
     index_gateway_client:
-      server_address: dns:///loki-index-gateway-grpc-lokistack-dev.default.svc.cluster.local:9095`,
+      server_address: dns:///loki-index-gateway-grpc-lokistack-dev.default.svc.cluster.local:9095
+      grpc_client_config:
+        grpc_compression: gzip`,
 			expStructuredMetadata: `
   allow_structured_metadata: false`,
 		},
@@ -2323,7 +2372,9 @@ func TestBuild_ConfigAndRuntimeConfig_Schemas(t *testing.T) {
     cache_ttl: 24h
     resync_interval: 5m
     index_gateway_client:
-      server_address: dns:///loki-index-gateway-grpc-lokistack-dev.default.svc.cluster.local:9095`,
+      server_address: dns:///loki-index-gateway-grpc-lokistack-dev.default.svc.cluster.local:9095
+      grpc_client_config:
+        grpc_compression: gzip`,
 			expStructuredMetadata: `
   allow_structured_metadata: true`,
 		},
@@ -2378,13 +2429,17 @@ func TestBuild_ConfigAndRuntimeConfig_Schemas(t *testing.T) {
     resync_interval: 5m
     index_gateway_client:
       server_address: dns:///loki-index-gateway-grpc-lokistack-dev.default.svc.cluster.local:9095
+      grpc_client_config:
+        grpc_compression: gzip
   tsdb_shipper:
     active_index_directory: /tmp/loki/tsdb-index
     cache_location: /tmp/loki/tsdb-cache
     cache_ttl: 24h
     resync_interval: 5m
     index_gateway_client:
-      server_address: dns:///loki-index-gateway-grpc-lokistack-dev.default.svc.cluster.local:9095`,
+      server_address: dns:///loki-index-gateway-grpc-lokistack-dev.default.svc.cluster.local:9095
+      grpc_client_config:
+        grpc_compression: gzip`,
 			expStructuredMetadata: `
   allow_structured_metadata: true`,
 		},
