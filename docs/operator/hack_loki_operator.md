@@ -43,7 +43,7 @@ Loki Operator is the Kubernetes Operator for [Loki](https://grafana.com/docs/lok
   kubectl get pods
   ```
 
-  You should see `controller-manager-xxxx` and `minio-xxxx` pods running.
+  You should see `controller-manager-xxxx` and `garage-0` pods running.
 
 * Now create a LokiStack instance to get the various components of Loki up and running:
 
