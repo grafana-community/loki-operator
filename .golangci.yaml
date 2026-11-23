@@ -14,7 +14,7 @@ linters:
     - errorlint # checks modern error wrapping, comparisons, and assertions
     - misspell # spell checker
     - modernize # suggests newer stdlib and language idioms when applicable
-    # - nolintlint # validates nolint directives so they stay intentional # Disable temporarily as it would remove some nolint directives that are intentional https://github.com/dominikh/go-tools/issues/607
+    - nolintlint # validates nolint directives so they stay intentional
     - revive # configurable style and correctness checks
     - testifylint # catches common mistakes in testify assertions and tests
     - importas # checks that imports are sorted and have clear aliases
@@ -33,7 +33,6 @@ linters:
   exclusions:
     generated: strict
     warn-unused: true
-
 
 formatters:
   enable:

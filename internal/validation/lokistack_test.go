@@ -1645,7 +1645,6 @@ func TestLokiStackValidationWebhook_SchemaRemoval(t *testing.T) {
 							EffectiveDate: "2020-10-11",
 						},
 						{
-							//nolint:staticcheck
 							Version:       lokiv1.ObjectStorageSchemaV13,
 							EffectiveDate: "2024-10-22",
 						},
@@ -1679,7 +1678,6 @@ func TestLokiStackValidationWebhook_SchemaRemoval(t *testing.T) {
 				Storage: lokiv1.ObjectStorageSpec{
 					Schemas: []lokiv1.ObjectStorageSchema{
 						{
-							//nolint:staticcheck
 							Version:       lokiv1.ObjectStorageSchemaV13,
 							EffectiveDate: "2024-10-22",
 						},
