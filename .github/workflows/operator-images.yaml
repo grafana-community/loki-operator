@@ -21,6 +21,7 @@ jobs:
       organization: "grafanalabs-global/dockerhub-loki-prod-mirror"
       image_name: "loki-operator"
       tag: "latest"
+      push: false
 
   publish-openshift-operator:
     permissions:
@@ -33,6 +34,10 @@ jobs:
       organization: "openshift-logging"
       image_name: "loki-operator"
       tag: "latest"
+      push: true
+    secrets:
+      quay_username: ${{ secrets.QUAY_LOGGING_USERNAME }}
+      quay_password: ${{ secrets.QUAY_LOGGING_PASSWORD }}
 
   publish-openshift-bundle:
     permissions:
@@ -45,6 +50,10 @@ jobs:
       organization: "openshift-logging"
       image_name: "loki-operator-bundle"
       tag: "latest"
+      push: true
+    secrets:
+      quay_username: ${{ secrets.QUAY_LOGGING_USERNAME }}
+      quay_password: ${{ secrets.QUAY_LOGGING_PASSWORD }}
 
   publish-openshift-size-calculator:
     permissions:
@@ -57,6 +66,10 @@ jobs:
       organization: "openshift-logging"
       image_name: "storage-size-calculator"
       tag: "latest"
+      push: true
+    secrets:
+      quay_username: ${{ secrets.QUAY_LOGGING_USERNAME }}
+      quay_password: ${{ secrets.QUAY_LOGGING_PASSWORD }}
 
   publish-openshift-passthrough-gateway:
     permissions:
@@ -69,3 +82,7 @@ jobs:
       organization: "openshift-logging"
       image_name: "passthrough-gateway"
       tag: "latest"
+      push: true
+    secrets:
+      quay_username: ${{ secrets.QUAY_LOGGING_USERNAME }}
+      quay_password: ${{ secrets.QUAY_LOGGING_PASSWORD }}
