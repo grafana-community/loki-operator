@@ -54,7 +54,7 @@ func TestSigningCAExpired_ExpiredSecret(t *testing.T) {
 	e := &CertExpiredError{}
 	require.Error(t, err)
 	require.ErrorAs(t, err, &e)
-	require.Contains(t, err.(*CertExpiredError).Reasons, "already expired")
+	require.Contains(t, e.Reasons, "already expired")
 }
 
 func TestBuildSigningCASecret_Create(t *testing.T) {
