@@ -74,7 +74,7 @@ func TestCertificatesExpired(t *testing.T) {
 
 	require.Error(t, err)
 	require.ErrorAs(t, err, &expired)
-	require.Len(t, err.(*CertExpiredError).Reasons, 15)
+	require.Len(t, expired.Reasons, 15)
 }
 
 func TestBuildTargetCertKeyPairSecrets_Create(t *testing.T) {
