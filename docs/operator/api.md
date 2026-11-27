@@ -1894,6 +1894,9 @@ CredentialsRequest, but it can persist if the CCO or its configuration are incor
 </tr><tr><td><p>&#34;ReadyComponents&#34;</p></td>
 <td><p>ReasonReadyComponents when all LokiStack components are ready to serve traffic.</p>
 </td>
+</tr><tr><td><p>&#34;ResourceOwnershipConflict&#34;</p></td>
+<td><p>ReasonResourceOwnershipConflict when a resource already exists and is owned by a different controller.</p>
+</td>
 </tr><tr><td><p>&#34;StorageNeedsSchemaUpdate&#34;</p></td>
 <td><p>ReasonStorageNeedsSchemaUpdate when the object storage schema version is older than V13</p>
 </td>
